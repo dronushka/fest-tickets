@@ -1,7 +1,7 @@
 import { type NextPage } from "next"
 import Link from "next/link"
 
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
   return (
     <>
       <p>Дорогой, зритель!</p>
@@ -44,4 +44,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default HomePage
