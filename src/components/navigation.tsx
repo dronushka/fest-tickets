@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
-import Hamburger from "./hamburger"
+import { useState } from "react"
+
 // active={pathname === "/help"}
 const ProfileDropDown = ({ className = "" }: { className?: string }) => {
   const [opened, setOpened] = useState(false)
@@ -83,7 +83,7 @@ export default function Navigation() {
         </div>
         <div className="flex flex-1 items-center justify-between">
           <div
-            className={`absolute left-0 top-16 z-20 w-full h-full border-b bg-white p-4 sm:w-auto sm:static sm:block sm:border-none ${
+            className={`absolute left-0 top-16 z-20 h-full w-full border-b bg-white p-4 sm:static sm:block sm:w-auto sm:border-none ${
               opened ? "" : "hidden"
             }`}
           >
