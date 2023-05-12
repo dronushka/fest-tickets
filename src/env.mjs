@@ -8,6 +8,11 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
+    MYSQL_ROOT_PASSWORD: z.string(),
+    DB_HOST: z.string(),
+    DB_NAME: z.string(),
+    DB_USER: z.string(),
+    DB_PASSWORD: z.string(),
   },
 
   /**
@@ -25,6 +30,11 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    MYSQL_ROOT_PASSWORD: process.env.MYSQL_ROOT_PASSWORD,
+    DB_HOST: process.env.DB_HOST,
+    DB_NAME: process.env.DB_NAME,
+    DB_USER: process.env.DB_USER,
+    DB_PASSWORD: process.env.DB_PASSWORD,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
 });

@@ -9,9 +9,9 @@
 /coverage
 
 # database
-/prisma/db.sqlite
-/prisma/db.sqlite-journal
-
+mysql
+src/lib/db/migrations/*
+!src/lib/db/migrations/schema.ts
 # next.js
 /.next/
 /out/
@@ -40,3 +40,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+

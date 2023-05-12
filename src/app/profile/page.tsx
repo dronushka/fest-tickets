@@ -1,9 +1,10 @@
-import { type NextPage } from "next"
+import { db } from "~/lib/db/db"
+import { user } from "~/lib/db/migrations/schema"
 
-const ProfilePage: NextPage = () => {
+export default async function ProfilePage () {
+    const allUsers = await db.select().from(user)
+    console.log(allUsers)
   return (
     <>Профиль</>
   )
 }
-
-export default ProfilePage
