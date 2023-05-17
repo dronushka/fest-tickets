@@ -1,10 +1,13 @@
-import { db } from "~/lib/db/db"
-import { user } from "~/lib/db/migrations/schema"
+'use client'
+import React from 'react'
+import Head from 'next/head'
+import styles from '../../styles/Home.module.css'
 
-export default async function ProfilePage () {
-    const allUsers = await db.select().from(user)
-    console.log(allUsers)
+
+
+
+export default function Profile() {
   return (
-    <>Профиль</>
+    <p>Profile</p>
   )
 }
