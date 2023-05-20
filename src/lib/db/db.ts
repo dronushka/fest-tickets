@@ -1,7 +1,6 @@
-import { drizzle } from "drizzle-orm/mysql2"
-
 import mysql from "mysql2/promise"
-import { user } from "./migrations/schema"
+import { drizzle } from "drizzle-orm/mysql2"
+// import { migrate } from "drizzle-orm/mysql2/migrator"
 
 // create the connection
 const poolConnection = mysql.createPool({
@@ -13,4 +12,5 @@ const poolConnection = mysql.createPool({
 
 export const db = drizzle(poolConnection)
 
+// await migrate(db, { migrationsFolder: "src/lib/db/migrations" });
 

@@ -6,13 +6,15 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "push": "drizzle-kit push:mysql"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.2.1",
     "drizzle-orm": "^0.25.4",
     "mysql2": "^3.3.1",
     "next": "^13.4.2",
+    "next-auth": "^4.22.1",
     "nextjs-cors": "^2.1.2",
     "react": "18.2.0",
     "react-aria": "^3.24.0",
@@ -28,7 +30,8 @@
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
     "autoprefixer": "^10.4.14",
-    "drizzle-kit": "^0.17.6",
+    "dotenv": "^16.0.3",
+    "drizzle-kit": "^0.18.0",
     "eslint": "^8.36.0",
     "eslint-config-next": "^13.4.1",
     "postcss": "^8.4.21",
