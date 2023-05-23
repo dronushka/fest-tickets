@@ -1,50 +1,95 @@
-import { db } from "../db"
+// import { db } from "../db"
 import { InferModel, and, eq } from "drizzle-orm"
 import { accounts, users, sessions, verificationTokens } from "../schema/auth"
 import type { Adapter, AdapterUser } from "next-auth/adapters"
+import { MySql2Database } from "drizzle-orm/mysql2"
+import { createId } from "@paralleldrive/cuid2"
 
-export function DrizzleAdapter(d: typeof db): Adapter {
+export function DrizzleAdapter(db: MySql2Database): Adapter {
   return {
-    createUser: async (user: InferModel<typeof users, "insert">) => {
-      const [resultSetHeader] = await d.insert(users).values({ ...user })
+    createUser: async (user: Omit<InferModel<typeof users, "insert">, "id">) => {
+      const id = createId()
+
+      await db.insert(users).values({ ...user, id })
+
+      return db
+        .select()
+        .from(users)
+        .where(eq(users.id, id))
+        .then((res) => {
+          if (!res || !res[0]) throw "created user not found"
+          return { ...res[0], pk_id: undefined }
+        })
+    },
+    getUser: (id) => {
+      return db
+        .select()
+        .from(users)
+        .where(eq(users.id, parseInt(id)))
+        .then((res) =>
+          res && res[0] ? { ...res[0], id: String(res[0].id) } : null
+        )
+    },
+    getUserByEmail: (email) => {
+      return db
+        .select()
+        .from(users)
+        .where(eq(users.email, email))
+        .then((res) =>
+          res && res[0] ? { ...res[0], id: String(res[0].id) } : null
+        )
+    },
+    createSession: async (session) => {
+      const [resultSetHeader] = await db
+        .insert(sessions)
+        .values({ ...session, userId: parseInt(session.userId) })
+      return db
+        .select()
+        .from(sessions)
+        .where(eq(sessions.id, resultSetHeader.insertId))
+        .then((res) => {
+          if (!res || !res[0]) throw "created session not found"
+          return { ...res[0], userId: String(res[0].userId) }
+        })
+    },
+    getSessionAndUser: (data) => {
+      return db
+        .select({
+          session: sessions,
+          user: users,
+        })
+        .from(sessions)
+        .where(eq(sessions.sessionToken, data))
+        .innerJoin(users, eq(users.id, sessions.userId))
+        .then((res) =>
+          res && res[0]
+            ? {
+                ...res[0],
+                user: {
+                  ...res[0].user,
+                  id: String(res[0].user.id),
+                },
+                session: {
+                  ...res[0].session,
+                  userId: String(res[0].session.userId),
+                },
+              }
+            : null
+        )
+    },
+    updateUser: async (user) => {
+      const [resultSetHeader] = await db
+        .update(users)
+        .set({ ...user, id: parseInt(user.id) })
+        .where(eq(users.id, parseInt(user.id)))
       return db
         .select()
         .from(users)
         .where(eq(users.id, resultSetHeader.insertId))
-        .then((res) => res[0] as AdapterUser)
-      // .values({ ...data, id: 123 })
-      // .returning()
-      // .get()
-    },
-    getUser: (data) => {
-      return d.select().from(users).where(eq(users.id, data)).get() ?? null
-    },
-    getUserByEmail: (data) => {
-      return d.select().from(users).where(eq(users.email, data)).get() ?? null
-    },
-    createSession: (data) => {
-      return d.insert(sessions).values(data).returning().get()
-    },
-    getSessionAndUser: (data) => {
-      return (
-        d
-          .select({
-            session: sessions,
-            user: users,
-          })
-          .from(sessions)
-          .where(eq(sessions.sessionToken, data))
-          .innerJoin(users, eq(users.id, sessions.userId))
-          .get() ?? null
-      )
-    },
-    updateUser: (data) => {
-      return d
-        .update(users)
-        .set(data)
-        .where(eq(users.id, data.id))
-        .returning()
-        .get()
+        .then((res) => {
+          if (!res || !res[0]) throw "updated user not found"
+          return { ...res[0], id: String(res[0].id) }
+        })
     },
     updateSession: (data) => {
       return d

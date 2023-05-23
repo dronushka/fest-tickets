@@ -10,12 +10,14 @@
     "push": "drizzle-kit push:mysql"
   },
   "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.0",
     "@t3-oss/env-nextjs": "^0.2.1",
     "drizzle-orm": "^0.25.4",
     "mysql2": "^3.3.1",
     "next": "^13.4.2",
     "next-auth": "^4.22.1",
     "nextjs-cors": "^2.1.2",
+    "nodemailer": "^6.9.2",
     "react": "18.2.0",
     "react-aria": "^3.24.0",
     "react-dom": "18.2.0",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@types/eslint": "^8.21.3",
     "@types/node": "^18.15.5",
+    "@types/nodemailer": "^6.4.8",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",

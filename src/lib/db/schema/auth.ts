@@ -2,7 +2,8 @@ import { sql } from "drizzle-orm";
 import { datetime, index, int, mysqlEnum, mysqlTable, text, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
 
 export const users = mysqlTable("users", {
-	id: varchar("id", { length: 32 }).default(`uuid()`).primaryKey().notNull(),
+	pk_id: int("id").autoincrement().primaryKey().notNull(),
+	id: varchar("id", { length: 24 }).notNull(),
 	email: varchar("email", { length: 191 }).notNull(),
 	name: varchar("name", { length: 191 }),
 	nickname: varchar("nickname", { length: 191 }),
@@ -16,12 +17,13 @@ export const users = mysqlTable("users", {
 (table) => {
 	return {
 		emailKey: uniqueIndex("User_email_key").on(table.email),
+		cuid: uniqueIndex("cuid").on(table.id)
 	}
 });
 
 export const accounts = mysqlTable("accounts", {
 	id: varchar("id", { length: 191 }).primaryKey().notNull(),
-	userId: varchar("userId", { length: 32}).notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 	type: varchar("type", { length: 191 }).notNull(),
 	provider: varchar("provider", { length: 191 }).notNull(),
 	providerAccountId: varchar("providerAccountId", { length: 191 }).notNull(),
@@ -41,10 +43,10 @@ export const accounts = mysqlTable("accounts", {
 });
 
 export const sessions = mysqlTable("sessions", {
-	id: varchar("id", { length: 191 }).primaryKey().notNull(),
+	id: int("id").autoincrement().primaryKey().notNull(),
 	sessionToken: varchar("sessionToken", { length: 191 }).notNull(),
-	userId: varchar("userId", { length: 32}).notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
-	expires: datetime("expires", { mode: 'string', fsp: 3 }).notNull(),
+	userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	expires: datetime("expires", { fsp: 3 }).notNull(),
 },
 (table) => {
 	return {
